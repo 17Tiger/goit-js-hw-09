@@ -2,19 +2,15 @@ import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 const form = document.querySelector('form.form');
 
-const inputDelayEl = document.querySelector('input[name="delay"]');
-const inputStepEl = document.querySelector('input[name="step"]');
-const inputAmountEl = document.querySelector('input[name="amount"]');
-
 function createPromise(position, delay) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       const shouldResolve = Math.random() > 0.3;
       if (shouldResolve) {
-        // Fulfill
+        
         resolve({ position, delay });
       } else {
-        // Reject
+        
         reject({ position, delay });
       }
     }, delay);
@@ -22,8 +18,13 @@ function createPromise(position, delay) {
 }
 
 form.addEventListener('submit', onSubmit);
+
 function onSubmit(event) {
   event.preventDefault();
+
+  const inputDelayEl = form.elements['delay'];
+  const inputStepEl = form.elements['step'];
+  const inputAmountEl = form.elements['amount'];
 
   let delay = Number(inputDelayEl.value);
   let step = Number(inputStepEl.value);
@@ -32,9 +33,11 @@ function onSubmit(event) {
 
   delay = delay - step;
   form.reset();
+
   for (let i = 0; i < amount; i += 1) {
     position = i + 1;
     delay += step;
+
     createPromise(position, delay)
       .then(({ position, delay }) => {
         Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
@@ -44,3 +47,4 @@ function onSubmit(event) {
       });
   }
 }
+
